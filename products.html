@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF‑8"><meta name="viewport" content="width=device‑width,initial‑scale=1">
+  <title>Products</title>
+  <style>
+    body { font-family: sans-serif; padding: 2rem; }
+    .filters { margin-bottom: 1rem; }
+    .product { border: 1px solid #ddd; padding: 1rem; margin: .5rem; display: inline-block; width: 200px; vertical-align: top; }
+  </style>
+</head>
+<body>
+  <h1>Products</h1>
+  <div class="filters">
+    Category:
+    <select id="catFilter">
+      <option value="all">All</option>
+      <option value="Electronics">Electronics</option>
+      <option value="Clothing">Clothing</option>
+    </select>
+    Sort by:
+    <select id="sortBy">
+      <option value="rating">Rating ↓</option>
+      <option value="price_asc">Price ↑</option>
+      <option value="price_desc">Price ↓</option>
+    </select>
+  </div>
+  <div id="productList"></div>
+  <script>
+    const products = [
+      { id: 1, name: "Smartphone", category: "Electronics", price: 299, rating: 4.5 },
+      { id: 2, name: "T‑Shirt", category: "Clothing", price: 19, rating: 4.1 },
+      { id: 3, name: "Laptop", category: "Electronics", price: 999, rating: 4.8 },
+      { id: 4, name: "Jeans", category: "Clothing", price: 49, rating: 4.3 },
+    ];
+    const listEl = document.getElementById('productList');
+    const catEl = document.getElementById('catFilter');
+    const sortEl = document.getElementById('sortBy');
+    function renderProducts() {
+      let filtered = products.filter(p => catEl.value === 'all' || p.category === catEl.value);
+      const sort = sortEl.value;
+      filtered.sort((a,b) => {
+        if (sort === 'rating') return b.rating - a.rating;
+        if (sort === 'price_asc') return a.price - b.price;
+        if (sort === 'price_desc') return b.price - a.price;
+      });
+      listEl.innerHTML = '';
+      filtered.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'product';
+        div.innerHTML = `<h3>${p.name}</h3>
+                         <p>Category: ${p.category}</p>
+                         <p>Price: $${p.price}</p>
+                         <p>Rating: ${p.rating}</p>`;
+        listEl.appendChild(div);
+      });
+    }
+    catEl.addEventListener('change', renderProducts);
+    sortEl.addEventListener('change', renderProducts);
+    renderProducts();
+  </script>
+</body>
+</html>
